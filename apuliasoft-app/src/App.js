@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import DataTable from './DataTable';
+import DataTable from './components/data_table.tsx';
 import axios from 'axios'; 
+import './App.css';
 
 function App() {
     const [works, setWorks] = useState([]);
@@ -21,8 +22,8 @@ function App() {
     }, []);
 
     return (
-        <div>
-            <h1>La mia applicazione</h1>
+        <div className='app-container'>
+            <h1>Aggregazioni multiple</h1>
             <DataTable works={works} /> 
         </div>
     );
