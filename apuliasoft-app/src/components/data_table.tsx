@@ -1,14 +1,16 @@
 import React from "react";
 import "./data_table.css";
 
-interface Work {
-  project: {
+export interface Work {
+  project?: {
+    id: number;
     name: string;
   };
-  employee: {
+  employee?: {
+    id: number;
     name: string;
   };
-  date: string; // Assuming the date is a string in ISO format (e.g., "2024-05-17")
+  date?: string;
   hours: number;
 }
 
@@ -17,33 +19,53 @@ interface DataTableProps {
 }
 
 const DataTable: React.FC<DataTableProps> = ({ works }) => {
+  if (works.length === 0) {
+    return <div>Nessun dato disponibile!</div>;
+  }
+
+  // Ordine dinamico delle colonne
+  const dynamicFields = Object.keys(works[0]).filter(
+    (field) => field !== "hours"
+  );
+  const columns = [...dynamicFields, "hours"];
+
   return (
     <>
-    <div className="title">
-      <h2>Tabella dei dati</h2>
-      </div>
-    <div className="table-container">
-      <table className="styled-table">
-        <thead>
-          <tr>
-            <th className="col-1">Progetto</th>
-            <th>Impiegato</th>
-            <th>Data</th>
-            <th>Ore</th>
-          </tr>
-        </thead>
-        <tbody>
-          {works.map((work, index) => (
-            <tr key={index}>
-              <td>{work.project.name}</td>
-              <td>{work.employee.name}</td>
-              <td>{new Date(work.date).toLocaleDateString()}</td>
-              <td>{work.hours}</td>
+      <div className="table-container">
+        <table className="styled-table">
+          <thead>
+            <tr>
+              {columns.map((column, index) => (
+                <th key={index}>
+                  {column.charAt(0).toUpperCase() + column.slice(1)}
+                </th>
+              ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            {works.map((work, index) => (
+              <tr key={index}>
+                {columns.map((column, colIndex) => (
+                  <td key={colIndex}>
+                    {column === "date"
+                      ? new Date(work[column] as string).toLocaleDateString(
+                          "en-GB",
+                          {
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric",
+                          }
+                        )
+                      : work[column] && typeof work[column] === "object"
+                      ? work[column].name
+                      : work[column]}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </>
   );
 };

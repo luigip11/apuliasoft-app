@@ -1,13 +1,228 @@
+/* All Fonts */
+@font-face {
+  font-family: global-font-regular;
+  src: url(../src/fonts/SF-Pro-Text-Regular.otf);
+  font-display: block;
+}
+
+@font-face {
+  font-family: global-font-medium;
+  src: url(../src/fonts/SF-Pro-Text-Medium.otf);
+  font-display: block;
+}
+
+@font-face {
+  font-family: global-font-light;
+  src: url(../src/fonts/SF-Pro-Text-Light.otf);
+  font-display: block;
+}
+
+@font-face {
+  font-family: global-font-bold;
+  src: url(../src/fonts/SF-Pro-Text-Bold.otf);
+  font-display: block;
+}
+
+@font-face {
+  font-family: global-font-semibold;
+  src: url(../src/fonts/SF-Pro-Text-Semibold.otf);
+  font-display: block;
+}
+
+@font-face {
+  font-family: global-font-heavy;
+  src: url(../src/fonts/SF-Pro-Text-Heavy.otf);
+  font-display: block;
+}
+
+:root {
+  /* Colors */
+  /* 01 - Fill */
+  --global-colors-ui-primary: #0052bd;
+  --global-colors-ui-primary--focus: #296dc7;
+  --global-colors-ui-primary--hover: #01449b;
+  --global-colors-ui-secondary: #00aaff;
+  --global-colors-ui-secondary-light: #d6e3f4;
+  --global-colors-ui-white: #ffffff;
+  --global-colors-ui-black: #0000;
+  --global-colors-cyan-blue: #335278;
+  --global-colors-ink-dark: #031832;
+  --global-colors-ink-ink: #35465b;
+  --global-colors-ink-light: #687484;
+  --global-colors-ink-lighter: #cdd1d6;
+  --global-colors-sky-dark: #d2d5da;
+  --global-colors-sky-sky: #e4e6e9;
+  --global-colors-ui-sky-sky--hover: #aeb4bd;
+  --global-colors-ui-sky-sky--focus: #b0b2bf;
+  --global-colors-sky-light: #f1f2f3;
+  --global-colors-sky-lighter: #f7f7f8;
+  --global-colors-feedback-success: #00cfa2;
+  --global-colors-feedback-danger: #ff4f48;
+  --global-colors-feedback-danger--hover: #c34242;
+  --global-colors-feedback-danger--focus: #ff726c;
+  --global-colors-feedback-warning: #fbcd03;
+  --global-colors-status-online: #00cfa2;
+  --global-colors-status-offline: #ff4f48;
+  --global-colors-status-maintenance: #ffbe48;
+  --global-colors-status-stopped: #687484;
+  --global-colors-radialbar-break: #f7ab82;
+  --global-colors-icon-disabled: #d8d8d8;
+  --global-colors-status-warning: #fed005;
+
+  /* 02 - Basic Palette */
+  --global-colors-palette-black: #000000;
+  --global-colors-palette-dark-grey: #333333;
+  --global-colors-palette-grey: #656565;
+  --global-colors-palette-light-grey: #989898;
+  --global-colors-palette-lighter-grey: #cbcbcb;
+  --global-colors-palette-violet: #7a3ca1;
+  --global-colors-palette-light-violet: #b089c6;
+  --global-colors-palette-lighter-violet: #e4d8ec;
+  --global-colors-palette-purple: #020088;
+  --global-colors-palette-light-purple: #6667b9;
+  --global-colors-palette-lighter-purple: #cccce8;
+  --global-colors-palette-blue: #0265b3;
+  --global-colors-palette-light-blue: #66a3d2;
+  --global-colors-palette-lighter-blue: #cde0ef;
+  --global-colors-palette-green: #007f4d;
+  --global-colors-palette-light-green: #67b293;
+  --global-colors-palette-lighter-green: #cbe5da;
+  --global-colors-palette-dark-yellow: #fed005;
+  --global-colors-palette-yellow: #fef305;
+  --global-colors-palette-light-yellow: #fff967;
+  --global-colors-palette-lighter-yellow: #fffdcc;
+  --global-colors-palette-orange: #f57631;
+  --global-colors-palette-light-orange: #f7ab82;
+  --global-colors-palette-lighter-orange: #fde3d6;
+  --global-colors-palette-red: #fd0201;
+  --global-colors-palette-light-red: #ff6766;
+  --global-colors-palette-lighter-red: #ffcccb;
+  --global-colors-palette-bordeaux: #a8272b;
+  --global-colors-palette-light-bordeaux: #c97d7f;
+  --global-colors-palette-lighter-bordeaux: #edd3d4;
+
+  /* 03 - Gradient */
+  --global-gradient-primary: linear-gradient(
+    45deg,
+    var(--global-colors-ui-secondary),
+    var(--global-colors-ui-primary)
+  );
+  --global-gradient-day: linear-gradient(45deg, #29c3ff, #c3f5ff);
+  --global-gradient-night: linear-gradient(45deg, #38397a, #674e91);
+  --global-gradient-dark: linear-gradient(
+    45deg,
+    var(--global-colors-ink-dark),
+    var(--global-colors-ink-ink)
+  );
+
+  /* 04 - Outline */
+  --global-colors-ui-primary-outline: 1px solid var(--global-colors-ui-primary);
+  --global-colors-ui-secondary-outline: 1px solid
+    var(--global-colors-ui-secondary);
+  --global-colors-ui-white-outline: 1px solid var(--global-colors-ui-white);
+  --global-colors-ink-dark-outline: 1px solid var(--global-colors-ink-dark);
+  --global-colors-ink-ink-outline: 1px solid var(--global-colors-ink-ink);
+  --global-colors-ink-light-outline: 1px solid var(--global-colors-ink-light);
+  --global-colors-ink-lighter-outline: 1px solid
+    var(--global-colors-ink-lighter);
+  --global-colors-sky-dark-outline: 1px solid var(--global-colors-sky-dark);
+  --global-colors-sky-sky-outline: 1px solid var(--global-colors-sky-sky);
+  --global-colors-sky-light-outline: 1px solid var(--global-colors-sky-light);
+  --global-colors-sky-lighter-outline: 1px solid
+    var(--global-colors-sky-lighter);
+  --global-colors-feedback-success-outline: 1px solid
+    var(--global-colors-feedback-success);
+  --global-colors-feedback-danger-outline: 1px solid
+    var(--global-colors-feedback-danger);
+
+  /* 05 - Overlays */
+  --global-colors-overlay-background: #02285a;
+
+  /* 06 - Shadows */
+  --global-colors-shadow-ui-primary: 0 1px 3px 0 rgba(0, 170, 255, 0.259); /* Same as --global-colors-ui-secondary */
+  --global-colors-shadow-feedback-danger: 0 1px 3px 0 rgba(255, 79, 72, 0.28); /* Same as --global-colors-feedback-danger */
+
+  /* 07 - Transparent */
+  --global-colors-transparent-ui-4: rgba(
+    255,
+    255,
+    255,
+    0.04
+  ); /* Same as --global-colors-ui-white */
+  --global-colors-transparent-ui-8: rgba(255, 255, 255, 0.08);
+  --global-colors-transparent-ui-16: rgba(255, 255, 255, 0.16);
+  --global-colors-transparent-ui-24: rgba(255, 255, 255, 0.24);
+  --global-colors-transparent-ui-48: rgba(255, 255, 255, 0.48);
+  --global-colors-transparent-ink-4: rgba(
+    3,
+    24,
+    50,
+    0.04
+  ); /* Same as --global-colors-ink-dark */
+  --global-colors-transparent-ink-8: rgba(3, 24, 50, 0.08);
+  --global-colors-transparent-ink-16: rgba(3, 24, 50, 0.16);
+  --global-colors-transparent-ink-24: rgba(3, 24, 50, 0.24);
+  --global-colors-transparent-ink-48: rgba(3, 24, 50, 0.48);
+
+  /* Elevations */
+  --global-elevation-00: 0 0 0 0 transparent;
+  --global-elevation-01: 0 1px 3px 0 rgba(0, 0, 0, 0.08);
+  --global-elevation-02: 0 2px 10px 0 rgba(0, 0, 0, 0.08);
+  --global-elevation-04: 0 4px 5px 0 rgba(0, 0, 0, 0.12),
+    0 1px 10px 0 rgba(0, 0, 0, 0.06), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
+  --global-elevation-08: 0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2 rgba(0, 0, 0, 0.06), 0 5px 5px -3px rgba(0, 0, 0, 0.01);
+
+  /* Typography */
+  --global-font-light: global-font-light; /* 200 */
+  --global-font-regular: global-font-regular; /* 400 */
+  --global-font-medium: global-font-medium;
+  --global-font-semi-bold: global-font-semibold; /* 600 */
+  --global-font-bold: global-font-bold; /* 700 */
+  --global-font-heavy: global-font-heavy; /* 900 */
+  --global-font-size-xxxxs: 0.6rem;
+  --global-font-size-xxxs: 0.8rem;
+  --global-font-size-xxs: 1rem;
+  --global-font-size-xs: 1.2rem;
+  --global-font-size-s: 1.3rem;
+  --global-font-size-sm: 1.4rem;
+  --global-font-size-md: 1.6rem;
+  --global-font-size-lg: 1.8rem;
+  --global-font-size-xl: 2rem;
+  --global-font-size-xxl: 2.4rem;
+
+  /* Spacing */
+  --global-spacing-xxs: 0.4rem;
+  --global-spacing-xs: 0.8rem;
+  --global-spacing-sm: 1.2rem;
+  --global-spacing-md: 1.6rem;
+  --global-spacing-ld: 1.8rem;
+  --global-spacing-lg: 2.4rem;
+  --global-spacing-xl: 3.2rem;
+  --global-spacing-xxl: 4.8rem;
+  --global-spacing-xxxl: 6.4rem;
+
+  /* Grid */
+  --layout-grid-margin-phone: 16px;
+  --layout-grid-gutter-phone: 16px;
+  --layout-grid-margin-tablet: 16px;
+  --layout-grid-gutter-tablet: 16px;
+  --layout-grid-margin-desktop: 24px;
+  --layout-grid-gutter-desktop: 24px;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+    sans-serif; */
+  font-family: var(--global-font-regular);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  /* font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace; */
+  font-family: var(--global-font-regular);
 }

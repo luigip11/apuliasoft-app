@@ -37,6 +37,48 @@
   }
 }
 
+/* custom style */
+
 .app-container {
   text-align: center;
+}
+
+.app-container h2 {
+  margin-bottom: 15px;
+}
+
+.app-button-column {
+  padding: 5px 230px;
+  align-content: space-between;
+}
+
+.app-button-column-left {
+  width: 48%;
+  float: left;
+  display: flex;
+  flex-flow: column;
+}
+
+.app-button-column-right {
+  width: 48%;
+  float: right;
+  display: flex;
+  flex-flow: column;
+}
+
+.app-button-column button {
+  margin-bottom: 10px;
+  min-width: 162px;
+  min-height: 41px;
+}
+
+.app-button-column button + button {
+  margin-left: 0px;
+}
+
+.app-button-reset {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
 }

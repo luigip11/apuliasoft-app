@@ -3,7 +3,6 @@
 }
 
 .table-container {
-  /* display: inline-table; */
   text-align: justify;
   display: flex;
   align-items: center;
@@ -14,21 +13,15 @@
 
 .styled-table {
   border-collapse: collapse;
-  margin: 25px 0;
-  font-size: 0.9em;
-  font-family: sans-serif;
+  margin: 10px 0 25px 0;
+  font-family: var(--global-font-regular);
   min-width: 400px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 
-/* .styled-table thead {
-  border-top-left-radius: 80px 80px;
-  border-top-right-radius: 80px 80px;
-} */
-
 .styled-table thead tr {
-  background-color: #1668e4;
-  color: #ffffff;
+  background-color: var(--global-colors-ui-primary);
+  color: var(--global-colors-ui-white);
   text-align: left;
 }
 
