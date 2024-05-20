@@ -1,109 +1,334 @@
-const express = require('express');
-const cors = require('cors');
+const express = require("express");
+const cors = require("cors");
 const app = express();
 const PORT = process.env.PORT || 3001; // Porta del server
 
 app.use(cors());
 
-
 // Avvio del server
 app.listen(PORT, () => {
-    console.log(`Il server è in ascolto sulla porta ${PORT}`);
+  console.log(`Il server è in ascolto sulla porta ${PORT}`);
 });
 
 const works = [
-    {
-    "project": { "id": 1, "name": "Mars Rover" },
-    "employee": { "id": 1, "name": "Mario" },
-    "date": "2021-08-26T22:00:00.000Z",
-    "hours": 5
-    },
-    {
-    "project": { "id": 2, "name": "Manhattan" },
-    "employee": { "id": 2, "name": "Giovanni" },
-    "date": "2021-08-30T22:00:00.000Z",
-    "hours": 3
-    },
-    {
-    "project": { "id": 1, "name": "Mars Rover" },
-    "employee": { "id": 1, "name": "Mario" },
-    "date": "2021-08-31T22:00:00.000Z",
-    "hours": 3
-    },
-    {
-    "project": { "id": 1, "name": "Mars Rover" },
-    "employee": { "id": 3, "name": "Lucia" },
-    "date": "2021-08-31T22:00:00.000Z",
-    "hours": 3
-    },
-    {
-    "project": { "id": 2, "name": "Manhattan" },
-    "employee": { "id": 1, "name": "Mario" },
-    "date": "2021-08-26T22:00:00.000Z",
-    "hours": 2
-    },
-    {
-    "project": { "id": 2, "name": "Manhattan" },
-    "employee": { "id": 2, "name": "Giovanni" },
-    "date": "2021-08-31T22:00:00.000Z",
-    "hours": 4
+  {
+    project: { id: 1, name: "Mars Rover" },
+    employee: { id: 1, name: "Mario" },
+    date: "2021-08-26T22:00:00.000Z",
+    hours: 5,
+  },
+  {
+    project: { id: 2, name: "Manhattan" },
+    employee: { id: 2, name: "Giovanni" },
+    date: "2021-08-30T22:00:00.000Z",
+    hours: 3,
+  },
+  {
+    project: { id: 1, name: "Mars Rover" },
+    employee: { id: 1, name: "Mario" },
+    date: "2021-08-31T22:00:00.000Z",
+    hours: 3,
+  },
+  {
+    project: { id: 1, name: "Mars Rover" },
+    employee: { id: 3, name: "Lucia" },
+    date: "2021-08-31T22:00:00.000Z",
+    hours: 3,
+  },
+  {
+    project: { id: 2, name: "Manhattan" },
+    employee: { id: 1, name: "Mario" },
+    date: "2021-08-26T22:00:00.000Z",
+    hours: 2,
+  },
+  {
+    project: { id: 2, name: "Manhattan" },
+    employee: { id: 2, name: "Giovanni" },
+    date: "2021-08-31T22:00:00.000Z",
+    hours: 4,
+  },
+];
+
+// Api per ottenere tutti i dati iniziali
+app.get("/api/works", (req, res) => {
+  if (!works || works.length === 0) {
+    res.status(500).json({ error: "No works available!" });
+    return;
+  }
+
+  const formattedWorks = works.map((work) => ({
+    ...work,
+    // formatta la data
+    date: new Date(work.date).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    }),
+  }));
+
+  res.json(formattedWorks);
+});
+
+// Api per aggregazioni multiple (in test)
+app.get("/api/aggregation", (req, res) => {
+  const { field1, field2, field3 } = req.query; // Campi su cui aggregare (es. 'project', 'employee', 'date')
+
+  // Verifica che almeno un campo sia stato specificato
+  if (!field1 && !field2 && !field3) {
+    return res
+      .status(400)
+      .json({ error: "Devi fornire almeno un campo per l'aggregazione" });
+  }
+
+  const aggregation = works.reduce((acc, work) => {
+    let key = "";
+
+    if (field1 && work[field1]) {
+      key += work[field1].name + "-";
     }
-    ];
+    if (field2 && work[field2]) {
+      key += work[field2].name + "-";
+    }
+    if (field3 && work[field3]) {
+      key += work[field3] + "-";
+    }
 
-// Endpoint per ottenere tutti i lavori
-app.get('/api/works', (req, res) => {
-    res.json(works);
+    key = key.slice(0, -1); // Rimuovi l'ultimo carattere '-'
+
+    if (!acc[key]) {
+      acc[key] = {};
+    }
+
+    if (field1 && work[field1] && typeof work[field1] === "object") {
+      key += work[field1].name + "-";
+      if (!acc[key]) {
+        acc[key] = {};
+        acc[key][field1] = { id: work[field1].id, name: work[field1].name };
+      }
+    }
+    if (field2 && work[field2] && typeof work[field2] === "object") {
+      key += work[field2].name + "-";
+      if (!acc[key]) {
+        acc[key] = {};
+        acc[key][field2] = { id: work[field2].id, name: work[field2].name };
+      }
+    }
+    if (field3 && work[field3] && typeof work[field3] === "object") {
+      key += work[field3] + "-";
+      if (!acc[key]) {
+        acc[key] = {};
+        acc[key][field3] = work[field3];
+      }
+    }
+
+    acc[key].hours = (acc[key].hours || 0) + work.hours;
+
+    return acc;
+  }, {});
+
+  res.json(Object.values(aggregation));
 });
 
+/////////////////////////////////////////
 
-//Endpoint per aggregazioni multiple
-app.get('/api/aggregation', (req, res) => {
-    const { field1, field2, field3 } = req.query; // Campi su cui aggregare (es. 'project', 'employee', 'date')
+// Api per ottenere il raggruppamento per progetto
+app.get("/api/aggregation/project", (req, res) => {
+  if (!works || works.length === 0) {
+    res.status(500).json({ error: "No aggregation available!" });
+    return;
+  }
 
-    const aggregation = works.reduce((acc, work) => {
-        
-        let chiave = '';
+  const aggregation = works.reduce((acc, work) => {
+    const key = work.project.name;
+    if (!acc[key]) {
+      acc[key] = {
+        project: {
+          id: work.project.id,
+          name: work.project.name,
+        },
+        hours: 0,
+      };
+    }
+    acc[key].hours += work.hours;
+    return acc;
+  }, {});
 
-        // field1
-        if (field1 && field1 === 'date' && work[field1]) {
-            const data = work[field1].substring(0, 10); 
-            chiave += data + '-';
-        } else if (field1 && work[field1]) {
-            chiave += work[field1].name + '-';
-        }
-
-        // field2 
-        if (field2 && field2 === 'date' && work[field2]) {
-            const data = work[field2].substring(0, 10); 
-            chiave += data + '-';
-        } else if (field2 && work[field2]) {
-            chiave += work[field2].name + '-';
-        }
-
-        // field3 
-        if (field3 && field3 === 'date' && work[field3]) {
-            const data = work[field3].substring(0, 10); 
-            chiave += data + '-';
-        } else if (field3 && work[field3]) {
-            chiave += work[field3] + '-';
-        }
-
-        if (!chiave) {
-            return acc; // oggetto vuoto
-        }
-
-        // Rimuovi l'ultimo carattere '-' dalla chiave
-        chiave = chiave.slice(0, -1);
-
-        if (!acc[chiave]) {
-            acc[chiave] = 0;
-        }
-        acc[chiave] += work.hours;
-        return acc;
-    }, {});
-
-    res.json(aggregation);
+  res.json(Object.values(aggregation));
 });
 
+// Api per ottenere il raggruppamento per impiegato
+app.get("/api/aggregation/employee", (req, res) => {
+  if (!works || works.length === 0) {
+    res.status(500).json({ error: "No aggregation available!" });
+    return;
+  }
 
+  const aggregation = works.reduce((acc, work) => {
+    const key = work.project.id + "-" + work.employee.name; // impiegati con stesso nome che lavorano su progetti diversi saranno considerati distinti
+    if (!acc[key]) {
+      acc[key] = {
+        employee: {
+          id: work.employee.id,
+          name: work.employee.name,
+        },
+        hours: 0,
+      };
+    }
+    acc[key].hours += work.hours;
+    return acc;
+  }, {});
 
+  res.json(Object.values(aggregation));
+});
+
+// Api per ottenere il raggruppamento per data
+app.get("/api/aggregation/date", (req, res) => {
+  if (!works || works.length === 0) {
+    res.status(500).json({ error: "No aggregation available!" });
+    return;
+  }
+
+  const aggregation = works.reduce((acc, work) => {
+    const date = new Date(work.date).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+    if (!acc[date]) {
+      acc[date] = {
+        date: date,
+        hours: 0,
+      };
+    }
+    acc[date].hours += work.hours;
+    return acc;
+  }, {});
+
+  res.json(Object.values(aggregation));
+});
+
+// Api per ottenere il raggruppamento per progetto e impiegato
+app.get("/api/aggregation/project-employee", (req, res) => {
+  if (!works || works.length === 0) {
+    res.status(500).json({ error: "No aggregation available!" });
+    return;
+  }
+
+  const aggregation = works.reduce((acc, work) => {
+    const key = work.project.name + "-" + work.employee.name;
+
+    if (!acc[key]) {
+      acc[key] = {
+        project: {
+          id: work.project.id,
+          name: work.project.name,
+        },
+        employee: {
+          id: work.employee.id,
+          name: work.employee.name,
+        },
+        hours: 0,
+      };
+    }
+
+    acc[key].hours += work.hours;
+    return acc;
+  }, {});
+
+  // trasforma l'oggetto di aggregazione in un array
+  const result = Object.values(aggregation);
+
+  // ordina array in base al nome del progetto e poi al nome dell'impiegato
+  result.sort((a, b) => {
+    if (a.project.name < b.project.name) {
+      return 1;
+    }
+    if (a.project.name > b.project.name) {
+      return -1;
+    }
+    return 0;
+  });
+
+  res.json(result);
+});
+
+// Api per ottenere il raggruppamento per progetto, impiegato e data
+app.get("/api/aggregation/project-employee-date", (req, res) => {
+  if (!works || works.length === 0) {
+    res.status(500).json({ error: "No aggregation available!" });
+    return;
+  }
+
+  const aggregation = works.reduce((acc, work) => {
+    const key = work.project.name + "-" + work.employee.name + "-" + work.date;
+
+    const date = new Date(work.date).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+
+    if (!acc[key]) {
+      acc[key] = {
+        project: {
+          id: work.project.id,
+          name: work.project.name,
+        },
+        employee: {
+          id: work.employee.id,
+          name: work.employee.name,
+        },
+        date: date,
+        hours: 0,
+      };
+    }
+
+    acc[key].hours += work.hours;
+    return acc;
+  }, {});
+
+  const result = Object.values(aggregation);
+
+  result.sort((a, b) => {
+    if (a.project.name < b.project.name) {
+      return 1;
+    }
+    if (a.project.name > b.project.name) {
+      return -1;
+    }
+    return new Date(a.date) - new Date(b.date);
+  });
+
+  res.json(result);
+});
+
+// Api per ottenere il raggruppamento per impiegato e progetto
+app.get("/api/aggregation/employee-project", (req, res) => {
+  if (!works || works.length === 0) {
+    res.status(500).json({ error: "No aggregation available!" });
+    return;
+  }
+
+  const aggregation = works.reduce((acc, work) => {
+    const key = work.employee.name + "-" + work.project.name;
+
+    if (!acc[key]) {
+      acc[key] = {
+        employee: {
+          id: work.employee.id,
+          name: work.employee.name,
+        },
+        project: {
+          id: work.project.id,
+          name: work.project.name,
+        },
+        hours: 0,
+      };
+    }
+
+    acc[key].hours += work.hours;
+    return acc;
+  }, {});
+
+  res.json(Object.values(aggregation));
+});
