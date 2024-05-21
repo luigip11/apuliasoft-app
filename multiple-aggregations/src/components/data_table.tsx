@@ -1,3 +1,4 @@
+import _ from "lodash";
 import React from "react";
 import "./data_table.css";
 
@@ -19,11 +20,14 @@ interface DataTableProps {
 }
 
 const DataTable: React.FC<DataTableProps> = ({ works }) => {
-  if (works.length === 0) {
+  if (_.isEmpty(works)) {
     return <div>Nessun dato disponibile!</div>;
   }
 
-  // Ordine dinamico delle colonne
+  // Ordine dinamico delle colonne:
+  // questa funzione prende il primo oggetto nell’array works e
+  // restituisce un array di tutte le sue chiavi
+  // poi filtra l’array restituito da Object.keys() rimuovendo la chiave “hours”
   const dynamicFields = Object.keys(works[0]).filter(
     (field) => field !== "hours"
   );
