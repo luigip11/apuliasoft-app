@@ -27,7 +27,7 @@ export const ToastNotification = ({
     // position: toast.POSITION.BOTTOM_RIGHT,
     closeButton: true,
     style: { fontSize: "12px" },
-    autoClose: 4000,
+    autoClose: 2000,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,

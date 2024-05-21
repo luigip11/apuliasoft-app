@@ -10,6 +10,7 @@ app.listen(PORT, () => {
   console.log(`Il server è in ascolto sulla porta ${PORT}`);
 });
 
+// Dati db
 const works = [
   {
     project: { id: 1, name: "Mars Rover" },
@@ -49,7 +50,7 @@ const works = [
   },
 ];
 
-// Api per ottenere tutti i dati iniziali
+// * Api per ottenere tutti i dati iniziali *
 app.get("/api/works", (req, res) => {
   if (!works || works.length === 0) {
     res.status(500).json({ error: "No works available!" });
@@ -58,7 +59,7 @@ app.get("/api/works", (req, res) => {
 
   const formattedWorks = works.map((work) => ({
     ...work,
-    // formatta la data
+    // converte la data da timestamp al formato dd mmm yyyy
     date: new Date(work.date).toLocaleDateString("en-GB", {
       day: "2-digit",
       month: "short",
@@ -69,17 +70,17 @@ app.get("/api/works", (req, res) => {
   res.json(formattedWorks);
 });
 
-// Api per ottenere il raggruppamento per progetto
+// * Api per ottenere il raggruppamento per progetto *
 app.get("/api/aggregation/project", (req, res) => {
   if (!works || works.length === 0) {
     res.status(500).json({ error: "No aggregation available!" });
     return;
   }
 
-  const aggregation = works.reduce((acc, work) => {
+  const aggregation = works.reduce((aggr, work) => {
     const key = work.project.name;
-    if (!acc[key]) {
-      acc[key] = {
+    if (!aggr[key]) {
+      aggr[key] = {
         project: {
           id: work.project.id,
           name: work.project.name,
@@ -87,24 +88,24 @@ app.get("/api/aggregation/project", (req, res) => {
         hours: 0,
       };
     }
-    acc[key].hours += work.hours;
-    return acc;
+    aggr[key].hours += work.hours;
+    return aggr;
   }, {});
 
   res.json(Object.values(aggregation));
 });
 
-// Api per ottenere il raggruppamento per impiegato
+// * Api per ottenere il raggruppamento per impiegato *
 app.get("/api/aggregation/employee", (req, res) => {
   if (!works || works.length === 0) {
     res.status(500).json({ error: "No aggregation available!" });
     return;
   }
 
-  const aggregation = works.reduce((acc, work) => {
+  const aggregation = works.reduce((aggr, work) => {
     const key = work.project.id + "-" + work.employee.name; // impiegati con stesso nome che lavorano su progetti diversi saranno considerati distinti
-    if (!acc[key]) {
-      acc[key] = {
+    if (!aggr[key]) {
+      aggr[key] = {
         employee: {
           id: work.employee.id,
           name: work.employee.name,
@@ -112,51 +113,52 @@ app.get("/api/aggregation/employee", (req, res) => {
         hours: 0,
       };
     }
-    acc[key].hours += work.hours;
-    return acc;
+    aggr[key].hours += work.hours;
+    return aggr;
   }, {});
 
   res.json(Object.values(aggregation));
 });
 
-// Api per ottenere il raggruppamento per data
+// * Api per ottenere il raggruppamento per data *
 app.get("/api/aggregation/date", (req, res) => {
   if (!works || works.length === 0) {
     res.status(500).json({ error: "No aggregation available!" });
     return;
   }
 
-  const aggregation = works.reduce((acc, work) => {
+  const aggregation = works.reduce((aggr, work) => {
+    // converte la data da timestamp al formato dd mmm yyyy
     const date = new Date(work.date).toLocaleDateString("en-GB", {
       day: "2-digit",
       month: "short",
       year: "numeric",
     });
-    if (!acc[date]) {
-      acc[date] = {
+    if (!aggr[date]) {
+      aggr[date] = {
         date: date,
         hours: 0,
       };
     }
-    acc[date].hours += work.hours;
-    return acc;
+    aggr[date].hours += work.hours;
+    return aggr;
   }, {});
 
   res.json(Object.values(aggregation));
 });
 
-// Api per ottenere il raggruppamento per progetto e impiegato
+// * Api per ottenere il raggruppamento per progetto e impiegato *
 app.get("/api/aggregation/project-employee", (req, res) => {
   if (!works || works.length === 0) {
     res.status(500).json({ error: "No aggregation available!" });
     return;
   }
 
-  const aggregation = works.reduce((acc, work) => {
+  const aggregation = works.reduce((aggr, work) => {
     const key = work.project.name + "-" + work.employee.name;
 
-    if (!acc[key]) {
-      acc[key] = {
+    if (!aggr[key]) {
+      aggr[key] = {
         project: {
           id: work.project.id,
           name: work.project.name,
@@ -169,8 +171,8 @@ app.get("/api/aggregation/project-employee", (req, res) => {
       };
     }
 
-    acc[key].hours += work.hours;
-    return acc;
+    aggr[key].hours += work.hours;
+    return aggr;
   }, {});
 
   // trasforma l'oggetto di aggregazione in un array
@@ -190,18 +192,19 @@ app.get("/api/aggregation/project-employee", (req, res) => {
   res.json(result);
 });
 
-// Api per ottenere il raggruppamento per impiegato e progetto
+// * Api per ottenere il raggruppamento per impiegato e progetto *
 app.get("/api/aggregation/employee-project", (req, res) => {
   if (!works || works.length === 0) {
     res.status(500).json({ error: "No aggregation available!" });
     return;
   }
 
-  const aggregation = works.reduce((acc, work) => {
-    const key = work.employee.name + "-" + work.project.name;
+  const aggregation = works.reduce((aggr, work) => {
+    const key = work.employee.name + "-" + work.project.name; // chiave utilizzata per raggruppare le ore di lavoro per dipendente e progetto
 
-    if (!acc[key]) {
-      acc[key] = {
+    // se l'oggetto aggr non ha ancora una proprietà con la chiave univoca viene creata una nuova proprietà con quella chiave
+    if (!aggr[key]) {
+      aggr[key] = {
         employee: {
           id: work.employee.id,
           name: work.employee.name,
@@ -211,24 +214,37 @@ app.get("/api/aggregation/employee-project", (req, res) => {
           name: work.project.name,
         },
         hours: 0,
+        startDate: work.date,
       };
+    } else if (work.date < aggr[key].startDate) {
+      aggr[key].startDate = work.date; // ogni volta che trova un elem. con una data precedente aggiorna l'oggetto startDate
     }
 
-    acc[key].hours += work.hours;
-    return acc;
+    // ore di lavoro elem. corrente vengono aggiunte al conteggio ore oggetto di aggregazione corrispondente
+    aggr[key].hours += work.hours;
+
+    return aggr;
   }, {});
 
-  res.json(Object.values(aggregation));
+  // ordina gli oggetti di aggregazione in base alla data di inizio
+  const sortedAggregation = Object.values(aggregation).sort((a, b) =>
+    a.startDate.localeCompare(b.startDate)
+  );
+
+  // crea un nuovo oggetto senza il campo startDate (estrae startDate dall'array originale e raccoglie il resto in un nuovo oggetto)
+  const result = sortedAggregation.map(({ startDate, ...item }) => item);
+
+  res.json(result);
 });
 
-// Api per ottenere il raggruppamento per progetto, impiegato e data
+// * Api per ottenere il raggruppamento per progetto, impiegato e data *
 app.get("/api/aggregation/project-employee-date", (req, res) => {
   if (!works || works.length === 0) {
     res.status(500).json({ error: "No aggregation available!" });
     return;
   }
 
-  const aggregation = works.reduce((acc, work) => {
+  const aggregation = works.reduce((aggr, work) => {
     const key = work.project.name + "-" + work.employee.name + "-" + work.date;
 
     const date = new Date(work.date).toLocaleDateString("en-GB", {
@@ -237,8 +253,8 @@ app.get("/api/aggregation/project-employee-date", (req, res) => {
       year: "numeric",
     });
 
-    if (!acc[key]) {
-      acc[key] = {
+    if (!aggr[key]) {
+      aggr[key] = {
         project: {
           id: work.project.id,
           name: work.project.name,
@@ -252,8 +268,8 @@ app.get("/api/aggregation/project-employee-date", (req, res) => {
       };
     }
 
-    acc[key].hours += work.hours;
-    return acc;
+    aggr[key].hours += work.hours;
+    return aggr;
   }, {});
 
   const result = Object.values(aggregation);

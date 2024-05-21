@@ -36,14 +36,14 @@ function App() {
       );
       setWorks(response.data);
       ToastNotification({
-        toastId: "AggregationSuccess",
+        toastId: "ProjectAggregationSuccess",
         status: "success",
         description: "Raggruppamento avvenuto con successo",
       });
     } catch (error) {
       console.error("Error requesting API:", error);
       ToastNotification({
-        toastId: "AggregationError",
+        toastId: "ProjectAggregationError",
         status: "error",
         description: "Errore di rete, riprova più tardi.",
       });
@@ -57,14 +57,14 @@ function App() {
       );
       setWorks(response.data);
       ToastNotification({
-        toastId: "AggregationSuccess",
+        toastId: "EmployeeAggregationSuccess",
         status: "success",
         description: "Raggruppamento avvenuto con successo",
       });
     } catch (error) {
       console.error("Error requesting API:", error);
       ToastNotification({
-        toastId: "AggregationError",
+        toastId: "EmployeeAggregationError",
         status: "error",
         description: "Errore di rete, riprova più tardi.",
       });
@@ -78,14 +78,14 @@ function App() {
       );
       setWorks(response.data);
       ToastNotification({
-        toastId: "AggregationSuccess",
+        toastId: "DateAggregationSuccess",
         status: "success",
         description: "Raggruppamento avvenuto con successo",
       });
     } catch (error) {
       console.error("Error requesting API:", error);
       ToastNotification({
-        toastId: "AggregationError",
+        toastId: "DateAggregationError",
         status: "error",
         description: "Errore di rete, riprova più tardi.",
       });
@@ -99,35 +99,14 @@ function App() {
       );
       setWorks(response.data);
       ToastNotification({
-        toastId: "AggregationSuccess",
+        toastId: "ProjectEmployeeAggregationSuccess",
         status: "success",
         description: "Raggruppamento avvenuto con successo",
       });
     } catch (error) {
       console.error("Error requesting API:", error);
       ToastNotification({
-        toastId: "AggregationError",
-        status: "error",
-        description: "Errore di rete, riprova più tardi.",
-      });
-    }
-  };
-
-  const getProjectEmployeeDateAggregation = async () => {
-    try {
-      const response = await axios.get(
-        "http://localhost:3001/api/aggregation/project-employee-date"
-      );
-      setWorks(response.data);
-      ToastNotification({
-        toastId: "AggregationSuccess",
-        status: "success",
-        description: "Raggruppamento avvenuto con successo",
-      });
-    } catch (error) {
-      console.error("Error requesting API:", error);
-      ToastNotification({
-        toastId: "AggregationError",
+        toastId: "ProjectEmployeeAggregationError",
         status: "error",
         description: "Errore di rete, riprova più tardi.",
       });
@@ -141,14 +120,35 @@ function App() {
       );
       setWorks(response.data);
       ToastNotification({
-        toastId: "AggregationSuccess",
+        toastId: "EmployeeProjectSuccess",
         status: "success",
         description: "Raggruppamento avvenuto con successo",
       });
     } catch (error) {
       console.error("Error requesting API:", error);
       ToastNotification({
-        toastId: "AggregationError",
+        toastId: "EmployeeProjectError",
+        status: "error",
+        description: "Errore di rete, riprova più tardi.",
+      });
+    }
+  };
+
+  const getProjectEmployeeDateAggregation = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3001/api/aggregation/project-employee-date"
+      );
+      setWorks(response.data);
+      ToastNotification({
+        toastId: "ProjectEmployeeDateAggregationSuccess",
+        status: "success",
+        description: "Raggruppamento avvenuto con successo",
+      });
+    } catch (error) {
+      console.error("Error requesting API:", error);
+      ToastNotification({
+        toastId: "ProjectEmployeeDateAggregationError",
         status: "error",
         description: "Errore di rete, riprova più tardi.",
       });
