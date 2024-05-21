@@ -166,9 +166,13 @@ function App() {
       </div>
       <div className="app-container">
         <h1>Aggregazioni multiple</h1>
-        <h2>Tabella dei dati</h2>
+        <div className="app-container-subtitle">
+          <h2>Tabella dati</h2>
+        </div>
         <DataTable works={works} />
-        <h2>Scegli un'opzione:</h2>
+        <div className="app-container-subtitle">
+          <h2>Scegli un'opzione:</h2>
+        </div>
         <div className="app-button-column">
           <div className="app-button-column-left">
             <Button

@@ -122,7 +122,7 @@ button:disabled {
 }
 
 .button--small > * {
-  font-size: var(--global-font-size-sm);
+  font-size: var(--global-font-size-s);
   padding: 8px 12px;
 }
 

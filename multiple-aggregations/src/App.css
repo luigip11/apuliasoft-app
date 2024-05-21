@@ -1,10 +1,11 @@
-/* Custom Style */
+/* #region App custom style */
 .app-container {
   text-align: center;
 }
 
-.app-container h2 {
-  margin-bottom: 15px;
+.app-container-subtitle {
+  color: var(--global-colors-ink-light);
+  margin-bottom: 20px;
 }
 
 .app-button-column {
@@ -49,7 +50,7 @@
   bottom: 0;
   left: 0;
   width: auto;
-  background-color: var(--global-colors-sky-light);
+  background-color: var(--global-colors-palette-lighter-blue);
   padding: 10px;
   text-align: left;
   font-size: 12px;
@@ -67,7 +68,9 @@
   text-decoration: underline;
 }
 
-/* Toast Notification style */
+/* #endregion App custom style */
+
+/* #region Toast Notification style */
 .Toastify
   .Toastify__toast-container
   .Toastify__toast-theme--colored.Toastify__toast--success {
@@ -163,3 +166,5 @@
   .Toastify__zoom-enter {
   width: 16px;
 }
+
+/* #endregion Toast Notification style */

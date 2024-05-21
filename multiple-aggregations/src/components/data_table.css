@@ -5,6 +5,7 @@
   justify-content: center;
   flex-wrap: wrap;
   padding: 2px 30px;
+  min-height: 342px;
 }
 
 .styled-table {
