@@ -69,68 +69,6 @@ app.get("/api/works", (req, res) => {
   res.json(formattedWorks);
 });
 
-// Api per aggregazioni multiple (in test)
-app.get("/api/aggregation", (req, res) => {
-  const { field1, field2, field3 } = req.query; // Campi su cui aggregare (es. 'project', 'employee', 'date')
-
-  // Verifica che almeno un campo sia stato specificato
-  if (!field1 && !field2 && !field3) {
-    return res
-      .status(400)
-      .json({ error: "Devi fornire almeno un campo per l'aggregazione" });
-  }
-
-  const aggregation = works.reduce((acc, work) => {
-    let key = "";
-
-    if (field1 && work[field1]) {
-      key += work[field1].name + "-";
-    }
-    if (field2 && work[field2]) {
-      key += work[field2].name + "-";
-    }
-    if (field3 && work[field3]) {
-      key += work[field3] + "-";
-    }
-
-    key = key.slice(0, -1); // Rimuovi l'ultimo carattere '-'
-
-    if (!acc[key]) {
-      acc[key] = {};
-    }
-
-    if (field1 && work[field1] && typeof work[field1] === "object") {
-      key += work[field1].name + "-";
-      if (!acc[key]) {
-        acc[key] = {};
-        acc[key][field1] = { id: work[field1].id, name: work[field1].name };
-      }
-    }
-    if (field2 && work[field2] && typeof work[field2] === "object") {
-      key += work[field2].name + "-";
-      if (!acc[key]) {
-        acc[key] = {};
-        acc[key][field2] = { id: work[field2].id, name: work[field2].name };
-      }
-    }
-    if (field3 && work[field3] && typeof work[field3] === "object") {
-      key += work[field3] + "-";
-      if (!acc[key]) {
-        acc[key] = {};
-        acc[key][field3] = work[field3];
-      }
-    }
-
-    acc[key].hours = (acc[key].hours || 0) + work.hours;
-
-    return acc;
-  }, {});
-
-  res.json(Object.values(aggregation));
-});
-
-/////////////////////////////////////////
-
 // Api per ottenere il raggruppamento per progetto
 app.get("/api/aggregation/project", (req, res) => {
   if (!works || works.length === 0) {
@@ -252,6 +190,37 @@ app.get("/api/aggregation/project-employee", (req, res) => {
   res.json(result);
 });
 
+// Api per ottenere il raggruppamento per impiegato e progetto
+app.get("/api/aggregation/employee-project", (req, res) => {
+  if (!works || works.length === 0) {
+    res.status(500).json({ error: "No aggregation available!" });
+    return;
+  }
+
+  const aggregation = works.reduce((acc, work) => {
+    const key = work.employee.name + "-" + work.project.name;
+
+    if (!acc[key]) {
+      acc[key] = {
+        employee: {
+          id: work.employee.id,
+          name: work.employee.name,
+        },
+        project: {
+          id: work.project.id,
+          name: work.project.name,
+        },
+        hours: 0,
+      };
+    }
+
+    acc[key].hours += work.hours;
+    return acc;
+  }, {});
+
+  res.json(Object.values(aggregation));
+});
+
 // Api per ottenere il raggruppamento per progetto, impiegato e data
 app.get("/api/aggregation/project-employee-date", (req, res) => {
   if (!works || works.length === 0) {
@@ -300,35 +269,4 @@ app.get("/api/aggregation/project-employee-date", (req, res) => {
   });
 
   res.json(result);
-});
-
-// Api per ottenere il raggruppamento per impiegato e progetto
-app.get("/api/aggregation/employee-project", (req, res) => {
-  if (!works || works.length === 0) {
-    res.status(500).json({ error: "No aggregation available!" });
-    return;
-  }
-
-  const aggregation = works.reduce((acc, work) => {
-    const key = work.employee.name + "-" + work.project.name;
-
-    if (!acc[key]) {
-      acc[key] = {
-        employee: {
-          id: work.employee.id,
-          name: work.employee.name,
-        },
-        project: {
-          id: work.project.id,
-          name: work.project.name,
-        },
-        hours: 0,
-      };
-    }
-
-    acc[key].hours += work.hours;
-    return acc;
-  }, {});
-
-  res.json(Object.values(aggregation));
 });

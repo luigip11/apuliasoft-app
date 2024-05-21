@@ -37,7 +37,7 @@
   }
 }
 
-/* custom style */
+/* Custom Style */
 
 .app-container {
   text-align: center;
@@ -81,4 +81,101 @@
   flex-direction: column;
   align-items: center;
   margin-top: 10px;
+}
+
+/* Toast Notification style */
+.Toastify
+  .Toastify__toast-container
+  .Toastify__toast-theme--colored.Toastify__toast--success {
+  background: var(--global-colors-feedback-success);
+  padding: 0;
+  min-height: unset;
+  max-height: unset;
+}
+
+.Toastify
+  .Toastify__toast-container
+  .Toastify__toast-theme--colored.Toastify__toast--error {
+  background: var(--global-colors-feedback-danger);
+  padding: 0;
+  min-height: unset;
+  max-height: unset;
+}
+
+.Toastify
+  .Toastify__toast-container
+  .Toastify__toast-theme--colored.Toastify__toast--default {
+  background: var(--global-colors-ink-dark);
+  padding: 0;
+  min-height: unset;
+  max-height: unset;
+}
+
+.Toastify__toast-theme--colored.Toastify__toast {
+  color: var(--global-colors-ui-white);
+}
+
+.toast-wrapper .Toastify__toast-container {
+  position: fixed;
+  padding: 4px;
+  box-sizing: border-box;
+  color: var(--global-colors-ui-white);
+  width: 386px;
+  top: calc(100% - 85px);
+  right: 5px;
+}
+
+.toast-wrapper {
+  position: absolute;
+  z-index: 999;
+}
+
+.toast-wrapper .toast-title {
+  color: var(--global-colors-ui-white);
+  font-family: var(--global-font-semi-bold);
+  font-size: 14px;
+  letter-spacing: 0;
+  line-height: 18px;
+  margin-left: 4px;
+  margin-bottom: 4px;
+}
+
+.toast-wrapper .toast-description {
+  color: var(--global-colors-ui-white);
+  font-family: var(--global-font-regular);
+  font-size: 14px;
+  letter-spacing: 0;
+  line-height: 18px;
+  margin-left: 4px;
+}
+
+.toast-wrapper .Toastify__close-button svg {
+  color: var(--global-colors-ui-white);
+  background: transparent;
+  outline: none;
+  border: none;
+  cursor: var(--global-cursor-pointer);
+  width: 17px;
+  height: 19px;
+}
+
+.toast-wrapper .Toastify__toast-body {
+  padding: 15px;
+  padding-right: 0;
+}
+
+.toast-wrapper .Toastify__toast-body + .Toastify__close-button {
+  width: 12px;
+  margin: 18px 18px auto 0;
+}
+
+.toast-wrapper .Toastify__close-button {
+  opacity: 1;
+}
+
+.toast-wrapper
+  .Toastify__toast-icon
+  .Toastify--animate-icon
+  .Toastify__zoom-enter {
+  width: 16px;
 }
