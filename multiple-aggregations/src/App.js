@@ -1,4 +1,5 @@
 import axios from "axios";
+import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import "./App.css";
@@ -8,6 +9,8 @@ import { ToastNotification } from "./components/toast_notification.tsx";
 
 function App() {
   const [works, setWorks] = useState([]);
+  const aggregationSuccessText = "Raggruppamento avvenuto con successo";
+  const networkErrorText = "Errore di rete, riprova più tardi";
 
   // funzione per scaricare i dati iniziali
   const fetchWorks = async () => {
@@ -19,7 +22,7 @@ function App() {
       ToastNotification({
         toastId: "FetchWorksError",
         status: "error",
-        description: "Errore di rete, riprova più tardi.",
+        description: networkErrorText,
       });
     }
   };
@@ -38,14 +41,14 @@ function App() {
       ToastNotification({
         toastId: "ProjectAggregationSuccess",
         status: "success",
-        description: "Raggruppamento avvenuto con successo",
+        description: aggregationSuccessText,
       });
     } catch (error) {
       console.error("Error requesting API:", error);
       ToastNotification({
         toastId: "ProjectAggregationError",
         status: "error",
-        description: "Errore di rete, riprova più tardi.",
+        description: networkErrorText,
       });
     }
   };
@@ -59,14 +62,14 @@ function App() {
       ToastNotification({
         toastId: "EmployeeAggregationSuccess",
         status: "success",
-        description: "Raggruppamento avvenuto con successo",
+        description: aggregationSuccessText,
       });
     } catch (error) {
       console.error("Error requesting API:", error);
       ToastNotification({
         toastId: "EmployeeAggregationError",
         status: "error",
-        description: "Errore di rete, riprova più tardi.",
+        description: networkErrorText,
       });
     }
   };
@@ -80,14 +83,14 @@ function App() {
       ToastNotification({
         toastId: "DateAggregationSuccess",
         status: "success",
-        description: "Raggruppamento avvenuto con successo",
+        description: aggregationSuccessText,
       });
     } catch (error) {
       console.error("Error requesting API:", error);
       ToastNotification({
         toastId: "DateAggregationError",
         status: "error",
-        description: "Errore di rete, riprova più tardi.",
+        description: networkErrorText,
       });
     }
   };
@@ -101,14 +104,14 @@ function App() {
       ToastNotification({
         toastId: "ProjectEmployeeAggregationSuccess",
         status: "success",
-        description: "Raggruppamento avvenuto con successo",
+        description: aggregationSuccessText,
       });
     } catch (error) {
       console.error("Error requesting API:", error);
       ToastNotification({
         toastId: "ProjectEmployeeAggregationError",
         status: "error",
-        description: "Errore di rete, riprova più tardi.",
+        description: networkErrorText,
       });
     }
   };
@@ -122,14 +125,14 @@ function App() {
       ToastNotification({
         toastId: "EmployeeProjectSuccess",
         status: "success",
-        description: "Raggruppamento avvenuto con successo",
+        description: aggregationSuccessText,
       });
     } catch (error) {
       console.error("Error requesting API:", error);
       ToastNotification({
         toastId: "EmployeeProjectError",
         status: "error",
-        description: "Errore di rete, riprova più tardi.",
+        description: networkErrorText,
       });
     }
   };
@@ -143,14 +146,14 @@ function App() {
       ToastNotification({
         toastId: "ProjectEmployeeDateAggregationSuccess",
         status: "success",
-        description: "Raggruppamento avvenuto con successo",
+        description: aggregationSuccessText,
       });
     } catch (error) {
       console.error("Error requesting API:", error);
       ToastNotification({
         toastId: "ProjectEmployeeDateAggregationError",
         status: "error",
-        description: "Errore di rete, riprova più tardi.",
+        description: networkErrorText,
       });
     }
   };
@@ -172,7 +175,7 @@ function App() {
               aspect="primary"
               size="small"
               label="Raggruppa per progetto"
-              disabled={works.length === 0 ? true : false}
+              disabled={_.isEmpty(works)}
               onClick={() => {
                 getProjectAggregation();
               }}
@@ -181,7 +184,7 @@ function App() {
               aspect="primary"
               size="small"
               label="Raggruppa per impiegato"
-              disabled={works.length === 0 ? true : false}
+              disabled={_.isEmpty(works)}
               onClick={() => {
                 getEmployeeAggregation();
               }}
@@ -190,7 +193,7 @@ function App() {
               aspect="primary"
               size="small"
               label="Raggruppa per data"
-              disabled={works.length === 0 ? true : false}
+              disabled={_.isEmpty(works)}
               onClick={() => {
                 getDateAggregation();
               }}
@@ -201,7 +204,7 @@ function App() {
               aspect="outline"
               size="small"
               label="Raggruppa per progetto e impiegato"
-              disabled={works.length === 0 ? true : false}
+              disabled={_.isEmpty(works)}
               onClick={() => {
                 getProjectEmployeeAggregation();
               }}
@@ -210,7 +213,7 @@ function App() {
               aspect="outline"
               size="small"
               label="Raggruppa per impiegato e progetto"
-              disabled={works.length === 0 ? true : false}
+              disabled={_.isEmpty(works)}
               onClick={() => {
                 getEmployeeProjectAggregation();
               }}
@@ -219,7 +222,7 @@ function App() {
               aspect="outline"
               size="small"
               label="Raggruppa per progetto, impiegato e data"
-              disabled={works.length === 0 ? true : false}
+              disabled={_.isEmpty(works)}
               onClick={() => {
                 getProjectEmployeeDateAggregation();
               }}
@@ -231,11 +234,28 @@ function App() {
             aspect="danger"
             size="small"
             label="Ripristina tabella"
-            disabled={works.length === 0 ? true : false}
+            disabled={_.isEmpty(works)}
             onClick={() => {
               fetchWorks();
+              ToastNotification({
+                toastId: "RestoreSuccess",
+                status: "success",
+                description: "Tabella ripristinata con successo",
+              });
             }}
           />
+        </div>
+        <div className="app-footer">
+          <p>
+            Developed by:{" "}
+            <a
+              href="https://github.com/luigip11"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              https://github.com/luigip11
+            </a>
+          </p>
         </div>
       </div>
     </>
